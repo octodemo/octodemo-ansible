@@ -1,0 +1,41 @@
+name: Build and Publish Container
+
+on:
+  push:
+
+  # An ability to manually build and publish a container
+  workflow_dispatch:
+    inputs:
+      ref:
+        required: true
+        default: refs/heads/master
+        description: The git commit reference that you want to build (only tags will be pushed)
+
+jobs:
+  build:
+    name: Build
+    on: ubuntu-20.04
+
+    steps:
+      - name: Checkout Sources [workflow dispatch ref]
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.ref }}
+          
+      - name: Checkout Sources [event ref]
+        if: github.event_name != 'workflow_dispatch'
+        uses: actions/checkout@v2
+        with:
+          ref: 
+      
+      - name: Build and Publish Container
+        uses: docker/build-and-publish@v1
+        with:
+          username: <token>
+          password: ${{ secrets.OCTODEMO_OCTODEMOBOT_TOKEN }}
+          registry: docker.pkg.github.com
+          repository: ${{ github.repository }}/octodemo-ansible
+          tag_with_ref: true
+          push: ${{ startsWith(github.ref, 'refs/tags/') }}
+          
