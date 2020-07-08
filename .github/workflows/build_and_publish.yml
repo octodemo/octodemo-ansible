@@ -30,7 +30,7 @@ jobs:
           ref: 
       
       - name: Build and Publish Container
-        uses: docker/build-and-publish@v1
+        uses: docker/build-push-action@v1
         with:
           username: <token>
           password: ${{ secrets.OCTODEMO_OCTODEMOBOT_TOKEN }}
