@@ -6,6 +6,6 @@ RUN apt-get update && \
     apt-get clean
 
 RUN pip3 install setuptools
-RUN pip3 install "ansible[azure]==2.9.8"
+RUN pip3 install "ansible[azure]==2.9.10"
 
 ENTRYPOINT ["/usr/local/bin/ansible-playbook"]
